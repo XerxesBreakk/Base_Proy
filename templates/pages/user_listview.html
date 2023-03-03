@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block add_head_links %}
+<!-- Custom styles for this page -->
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+{% endblock add_head_links %}
+
+
+{% block left_sidebar %}
+{% include 'components/left_sidebar.html' %}
+{% endblock left_sidebar %}
+
+
+{% block navbar %}
+{% include 'components/navbar.html' %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Usuarios</h1>
+    <p class="mb-4">Listado de usuarios. Fondo azul para los usuarios de administración del sitio</p>
+    <a href="{% url 'user_createview' %}" class="btn btn-primary btn-icon-split mb-3">
+        <span class="icon text-white-50">
+            <i class="fas fa-flag"></i>
+        </span>
+        <span class="text">Crear usuario</span>
+    </a>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Listado de usuarios</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Nombre completo</th>
+                            <th>Correo</th>
+                            <th>¿Es profesor?</th>
+                            <th>Ultimo inicio de sesión</th>
+                            <th>¿Esta activo?</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Nombre completo</th>
+                            <th>Correo</th>
+                            <th>¿Es profesor?</th>
+                            <th>Ultimo inicio de sesión</th>
+                            <th>¿Esta activo?</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for user in object_list %}
+                        {% if user.is_superuser %}
+                        <tr class="table-primary">
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }} </td>
+                            <td>{% if user.is_staff %} <span class="badge rounded-pill text-bg-success">Si</span> {% else %} <span class="badge rounded-pill text-bg-danger">No</span> {% endif %}</td>
+                            <td>{{ user.last_login }}</td>
+                            <td>{% if user.is_active %} <span class="badge rounded-pill text-bg-success">Si</span> {% else %} <span class="badge rounded-pill text-bg-danger">No</span> {% endif %}</td>
+                            <td>
+                                <a href="{% url 'user_updateview' id=user.id %}" class="btn btn-sm btn-success btn-circle">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-danger btn-circle" data-toggle="modal" data-target="#exampleModal-{{user.id}}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                  
+                                <!-- Delete User Modal -->
+                                <div class="modal fade" id="exampleModal-{{user.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-{{user.id}}" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel-{{user.id}}">Eliminar usuario {{ user.username }} </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form method="post" style="display: initial !important" action="{% url 'user_deleteview' id=user.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary">Aceptar</button>
+                                            </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }} </td>
+                            <td>{% if user.is_staff %} <span class="badge rounded-pill text-bg-success">Si</span> {% else %} <span class="badge rounded-pill text-bg-danger">No</span> {% endif %}</td>
+                            <td>{{ user.last_login }}</td>
+                            <td>{% if user.is_active %} <span class="badge rounded-pill text-bg-success">Si</span> {% else %} <span class="badge rounded-pill text-bg-danger">No</span> {% endif %}</td>
+                            <td>
+                                <a href="{% url 'user_updateview' id=user.id %}" class="btn btn-sm btn-success btn-circle">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-danger btn-circle" data-toggle="modal" data-target="#exampleModal-{{user.id}}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                  
+                                <!-- Delete User Modal -->
+                                <div class="modal fade" id="exampleModal-{{user.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-{{user.id}}" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel-{{user.id}}">Eliminar usuario {{ user.username }} </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form method="post" style="display: initial !important" action="{% url 'user_deleteview' id=user.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary">Aceptar</button>
+                                            </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<!-- Page level plugins -->
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+{% endblock javascript %}

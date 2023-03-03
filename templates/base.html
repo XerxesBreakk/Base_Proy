@@ -17,6 +17,8 @@
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
     {% endblock head_links %}
+    {% block add_head_links %}
+    {% endblock add_head_links %}
 
 </head>
 
@@ -70,7 +72,6 @@
             </div>
         </div>
     </div>
-    {% block javascript %}
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -81,6 +82,7 @@
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
     
+    {% block javascript %}
     <!-- Page level plugins -->
     <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
     
